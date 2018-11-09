@@ -16,8 +16,4 @@ class Deck
     @deck.shuffle!
     self
   end
-  # заготовка метода для раздачи карт, берет первое n количество карт из перемешанной колоды
-  def deal(number_of_cards)
-    @deck.shift(number_of_cards)
-  end
 end
