@@ -7,14 +7,12 @@ class Card
     Двойка: 2, Тройка: 3, Четверка: 4, Пятерка: 5, Шестерка: 6, Семерка: 7, Восьмерка: 8, Девятка: 9,
     Десятка: 10, Валет: 10, Дама: 10, Король: 10
     }
-  attr_reader :face, :suit
+  attr_reader :face, :suit, :points
 
   # каждый экземпляр будет иметь масть и картинку
   def initialize(suit, face)
     @face = face
     @suit = suit
-  end
-
-  def points
+    @points = POINTS[face]
   end
 end

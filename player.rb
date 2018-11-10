@@ -1,8 +1,7 @@
- class Player
+class Player
   attr_reader :name, :bank, :hand
 
   # по умолчанию создается Дилер, либо человек
-  # добавил массив карт в руке
   def initialize(name = 'Dealer')
     @name = name
     @bank = 100
@@ -14,9 +13,12 @@
     @bank -= value
   end
 
-  # добавляет в переменную hand те карты которые раздают
   def add_cards(some_cards)
     some_cards.each { |x| @hand << x }
     @hand
+  end
+
+  def count_points
+    @hand.inject(0) { |sum, card| sum += card.points }
   end
 end

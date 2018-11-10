@@ -1,6 +1,4 @@
-# в данном классе будут все методы по сбору и выводу информации для игры
 class Interface
-  # запускаем этот метод для игрока и присваиваем имя
   def greeting
    print 'Как вас зовут?: '
    name = gets.chomp
@@ -8,14 +6,27 @@ class Interface
    name
   end
 
-  # Показываем результат раздачи (возможно этот метод нужно сделать общим а не на первые 2 карты)
-  def show_first_deal(human, comp)
+  def show_player_points(human)
+    puts "Внимание! Всего у Вас #{human.count_points} очков"
+  end
+
+  def show_player_deal(human)
+    puts "У Игрока #{human.name} следующие карты:"
+      human.hand.each { |card| puts "#{card.face} #{card.suit}"}
     puts
-    puts "Игроку выпали следующие карты:"
-    p human
-    puts "Внимание! У вас ..... очков"
+    show_player_points(human)
+  end
+
+  def show_comp_deal(comp)
     puts
-    puts "У дилера такие карты"
-    p comp
+    puts "У дилера такие карты:"
+    (comp.hand.size).times { print '* ' }
+    puts
+  end
+
+  def show_player_choice
+    puts "Выберите дальнейшее дейтсвие:"
+    puts "1. - Взять еще карту 2. - Пропустить 3. - Вскрываемся"
+    choice = gets.to_i
   end
 end
