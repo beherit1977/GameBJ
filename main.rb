@@ -5,10 +5,6 @@ require_relative 'deck'
 require_relative 'interface'
 
 interface = Interface.new
-game = Game.new
+game = Game.new(interface)
 
-game.assign_players(interface)
-
-game.first_deal(interface)
-
-game.player_choice(interface)
+game.start_game_session
