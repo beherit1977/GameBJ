@@ -1,16 +1,20 @@
 class Player
-  attr_reader :name, :bank, :hand
+  attr_reader :name, :hand
+  attr_accessor :bank
 
-  # по умолчанию создается Дилер, либо человек
-  def initialize(name = 'Dealer')
+  def initialize(name = 'Дилер')
     @name = name
     @bank = 100
     @hand = []
   end
 
-  # сделать ставку
   def make_bet(value = 10)
-    @bank -= value
+    @bank -= value if enough_money?
+    value
+  end
+
+  def enough_money?
+    @bank >= 10
   end
 
   def add_cards(some_cards)
@@ -18,7 +22,11 @@ class Player
     @hand
   end
 
-  def count_points
-    @hand.inject(0) { |sum, card| sum += card.points }
+    def count_points
+    sum = @hand.inject(0) { |sum, card| sum += card.points }
+    count = @hand.count { |x| x.face == :Туз }
+    sum -= 10 if (count == 2 && name != 'Дилер')
+    sum -= 20 if (count == 3 && name != 'Дилер')
+    sum
   end
 end
