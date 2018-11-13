@@ -27,10 +27,10 @@ class Player
   end
 
   def count_points
-    sum = @hand.inject(0) { |s, card| s += card.points }
+    sum = @hand.inject(0) { |s, card| s + card.points }
     count = @hand.count { |x| x.face == :Туз }
-    sum -= 10 if (count == 2 && name != 'Дилер')
-    sum -= 20 if (count == 3 && name != 'Дилер')
+    sum -= 10 if count == 2 && name != 'Дилер'
+    sum -= 20 if count == 3 && name != 'Дилер'
     sum
   end
 end

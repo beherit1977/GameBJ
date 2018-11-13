@@ -9,6 +9,7 @@ class Game
   def assign_players(interface)
     @human = Player.new(interface.greeting)
     @comp = Player.new
+    @players = [@human, @comp]
   end
 
   def start_game_session
@@ -39,43 +40,37 @@ class Game
   end
 
   def first_deal
-    @human.delete_cards
-    @comp.delete_cards
-    @human.add_cards(deal(2))
-    @comp.add_cards(deal(2))
+    @players.each(&:delete_cards)
+    @players.each { |x| x.add_cards(deal(2)) }
     @interface.show_player_deal(@human)
     @interface.show_comp_deal(@comp, @game_over)
   end
 
   def player_turn
     choice = @interface.show_player_choice
-    if choice == 1
-      @human.add_cards(deal(1))
-      @interface.show_player_deal(@human)
-      dealer_turn
-    elsif choice == 2
-      @interface.show_player_deal(@human)
-      dealer_turn
-    else
+    @human.add_cards(deal(1)) if choice == 1
+    if choice == 3
       @game_over = true
-      game_result
+      return game_result
     end
+
+    @interface.show_player_deal(@human)
+    dealer_turn
   end
 
   def dealer_turn
     if @comp.count_points < 17
       @comp.add_cards(deal(1))
       @interface.show_dealer_hit
-      game_result
     else
       @interface.show_dealer_stay
-      game_result
     end
+    game_result
   end
 
   def game_result
     @game_over = true
-    @interface.show_game_over
+    @interface.show_game_results
     @interface.show_player_deal(@human)
     @interface.show_comp_deal(@comp, @game_over)
     count_result
@@ -85,12 +80,10 @@ class Game
     if (@human.count_points > 21) && (@comp.count_points > 21)
       @interface.show_lose
       return_bets
-      return
     elsif @human.count_points == @comp.count_points
       @interface.show_bj_win if black_jack?
       @interface.show_tie
       return_bets
-      return
     else
       game_win
     end
@@ -104,18 +97,14 @@ class Game
 
   def game_win
     @interface.show_bj_win if black_jack?
-    choose_winner
-  end
 
-  def choose_winner
-    if @human.count_points > 21
-      comp_win
-    elsif @comp.count_points > 21
+    if @comp.count_points > 21 ||
+       (@human.count_points < 21 && @human.count_points > @comp.count_points)
       human_win
-    elsif @human.count_points > @comp.count_points
-      human_win
+      @interface.show_game_win(@human)
     else
       comp_win
+      @interface.show_game_win(@comp)
     end
   end
 
