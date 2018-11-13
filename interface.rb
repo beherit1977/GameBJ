@@ -28,6 +28,7 @@ class Interface
     else
       puts "У Дилера на руках:"
       (comp.hand.size).times { print '* ' }
+      puts
     end
   end
 
@@ -35,7 +36,7 @@ class Interface
     puts "Выберите дальнейшее дейтсвие:"
     puts
     puts "1. - Взять еще карту 2. - Пропустить 3. - Вскрываемся"
-    choice = gets.to_i
+    gets.to_i
   end
 
   def show_dealer_hit
@@ -45,61 +46,37 @@ class Interface
   end
 
   def show_dealer_stay
-    puts
     puts "Дилер пропускает ход"
-    puts
   end
 
   def show_game_over
-    puts
     puts "Игра окончена со следующими результатами:"
-    puts
   end
 
   def show_bj_win
-    puts
     puts "Black Jack!"
-    puts
   end
 
-  # def show_human_win(human)
-  #   puts
-  #   puts "Победил игрок #{human.name} с #{human.count_points} очками!"
-  #   puts
-  # end
-
-  # def show_comp_win(comp)
-  #   puts
-  #   puts "Победил Дилер с #{comp.count_points} очками!"
-  #   puts
-  # end
-
   def show_tie
-    puts
     puts "Это ничья!"
-    puts
   end
 
   def show_lose
-    puts
     puts "Перебор! Вы оба проиграли!"
-    puts
   end
 
   def show_make_bet
-    puts
     puts "Игроки сделали ставки по 10$ в банк"
-    puts
   end
 
   def show_banks(human, comp)
+    puts "В распоряжении игроков:"
     puts "Игрок #{human.name}: #{human.bank}$, Дилер: #{comp.bank}$"
   end
 
-  def show_bankrupt(human, comp)
+  def show_bankrupt
     puts
     puts "На счету одного из игроков не хватает средств для ставки!"
-    show_banks(human, comp)
     puts
   end
 
@@ -112,5 +89,15 @@ class Interface
     puts "Победил #{someone.name} с #{someone.count_points} очками!"
     puts "Ставки забирает победитель."
     puts "В банке победителя #{someone.name}: #{someone.bank}$"
+  end
+
+  def show_game_stop
+    puts "Сыграем еще?"
+    puts "1. Продолжаем 2. Заканчиваем игру"
+    gets.to_i
+  end
+
+  def game_over
+    puts "Игра закончена"
   end
 end

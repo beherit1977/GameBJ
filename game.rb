@@ -2,11 +2,8 @@ class Game
   attr_reader :human, :comp, :game_over, :bank
 
   def initialize(interface)
-    @current_deck = Deck.new
     @interface = interface
     assign_players(interface)
-    @game_over = false
-    @game_bank = 0
   end
 
   def assign_players(interface)
@@ -15,13 +12,9 @@ class Game
   end
 
   def start_game_session
-    if bankrupt?
-      @interface.show_bankrupt(@human, @comp)
-      return
-    else
-      @interface.show_make_bet
-      @game_bank = (@human.make_bet + @comp.make_bet)
-    end
+    next_round_reset
+    @interface.show_make_bet
+    @game_bank = (@human.make_bet + @comp.make_bet)
     first_deal
     black_jack? ? game_result : player_turn
   end
@@ -34,11 +27,20 @@ class Game
     (@human.count_points == 21) || (@comp.count_points == 21)
   end
 
+  def next_round_reset
+    @game_over = false
+    @game_bank = 0
+    @current_deck = Deck.new
+    @interface.show_banks(@human, @comp)
+  end
+
   def deal(number_of_cards)
     @current_deck.deck.shift(number_of_cards)
   end
 
   def first_deal
+    @human.delete_cards
+    @comp.delete_cards
     @human.add_cards(deal(2))
     @comp.add_cards(deal(2))
     @interface.show_player_deal(@human)
@@ -90,7 +92,7 @@ class Game
       return_bets
       return
     else
-      choose_winner
+      game_win
     end
   end
 
@@ -100,9 +102,12 @@ class Game
     @interface.show_return_bets(@human, @comp)
   end
 
-  def choose_winner
+  def game_win
     @interface.show_bj_win if black_jack?
+    choose_winner
+  end
 
+  def choose_winner
     if @human.count_points > 21
       comp_win
     elsif @comp.count_points > 21
